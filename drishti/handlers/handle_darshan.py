@@ -16,16 +16,17 @@ from typing import List, Optional
 
 import darshan
 import darshan.backend.cffi_backend as darshanll
-import includes.config as config
-import includes.module as module
 import pandas as pd
-from includes.module import HIGH, RECOMMENDATIONS, WARN, Panel, insights_total
-
-# from includes.module import *
-from includes.parser import args
 from packaging import version
 from rich import print
 from rich.padding import Padding
+
+import drishti.includes.config as config
+import drishti.includes.module as module
+from drishti.includes.module import HIGH, RECOMMENDATIONS, WARN, Panel, insights_total
+
+# from includes.module import *
+from drishti.includes.parser import args
 
 
 def is_available(name):
@@ -346,49 +347,49 @@ class AbstractDarshanTrace(abc.ABC):
         # TODO: for trace in traces
         for trace in self.traces:
             pass
-        module.check_misaligned(self.total_operations, self.total_mem_not_aligned, self.total_file_not_aligned,
-                                self.modules, self.name_records, self.lustre_df, self.dxt_posix,
-                                self.dxt_posix_read_data) # posix alignment
+        # module.check_misaligned(self.total_operations, self.total_mem_not_aligned, self.total_file_not_aligned,
+        #                         self.modules, self.name_records, self.lustre_df, self.dxt_posix,
+        #                         self.dxt_posix_read_data) # posix alignment
 
-        module.check_traffic(self.max_read_offset, self.total_read_size, self.max_write_offset, self.total_written_size,
-                             self.dxt_posix, self.dxt_posix_read_data, self.dxt_posix_write_data) # redundant reads
+        # module.check_traffic(self.max_read_offset, self.total_read_size, self.max_write_offset, self.total_written_size,
+        #                      self.dxt_posix, self.dxt_posix_read_data, self.dxt_posix_write_data) # redundant reads
 
-        module.check_random_operation(self.read_consecutive, self.read_sequential, self.read_random, self.total_reads,
-                                      self.write_consecutive, self.write_sequential, self.write_random,
-                                      self.total_writes, self.dxt_posix,
-                                      self.dxt_posix_read_data, self.dxt_posix_write_data) # random check
+        # module.check_random_operation(self.read_consecutive, self.read_sequential, self.read_random, self.total_reads,
+        #                               self.write_consecutive, self.write_sequential, self.write_random,
+        #                               self.total_writes, self.dxt_posix,
+        #                               self.dxt_posix_read_data, self.dxt_posix_write_data) # random check
 
-        module.check_shared_small_operation(self.total_shared_reads, self.total_shared_reads_small,
-                                            self.total_shared_writes,
-                                            self.total_shared_writes_small, self.shared_files, self.report.name_records)
+        # module.check_shared_small_operation(self.total_shared_reads, self.total_shared_reads_small,
+        #                                     self.total_shared_writes,
+        #                                     self.total_shared_writes_small, self.shared_files, self.report.name_records)
 
         module.check_long_metadata(self.count_long_metadata, self.modules)
 
-        module.check_shared_data_imblance(self.posix_shared_data_imbalance_stragglers_count,
-                                          self.posix_data_straggler_files,
-                                          self.report.name_records, self.dxt_posix,
-                                          self.dxt_posix_read_data,
-                                          self.dxt_posix_write_data)
+        # module.check_shared_data_imblance(self.posix_shared_data_imbalance_stragglers_count,
+        #                                   self.posix_data_straggler_files,
+        #                                   self.report.name_records, self.dxt_posix,
+        #                                   self.dxt_posix_read_data,
+        #                                   self.dxt_posix_write_data)
 
-        module.check_shared_time_imbalance(self.posix_stragglers_shared_file_time_imbalance_count,
-                                           self.posix_shared_time_imbalance_detected_files1, self.report.name_records)
+        # module.check_shared_time_imbalance(self.posix_stragglers_shared_file_time_imbalance_count,
+        #                                    self.posix_shared_time_imbalance_detected_files1, self.report.name_records)
 
-        module.check_individual_write_imbalance(self.posix_data_imbalance_count,
-                                                self.posix_shared_time_imbalance_detected_files2,
-                                                self.report.name_records, self.dxt_posix, self.dxt_posix_write_data)
+        # module.check_individual_write_imbalance(self.posix_data_imbalance_count,
+        #                                         self.posix_shared_time_imbalance_detected_files2,
+        #                                         self.report.name_records, self.dxt_posix, self.dxt_posix_write_data)
 
-        module.check_mpi_collective_read_operation(self.mpiio_coll_reads, self.mpiio_indep_reads,
-                                                   self.total_mpiio_read_operations,
-                                                   self.detected_files_mpi_coll_reads, self.report.name_records,
-                                                   self.dxt_mpiio)
+        # module.check_mpi_collective_read_operation(self.mpiio_coll_reads, self.mpiio_indep_reads,
+        #                                            self.total_mpiio_read_operations,
+        #                                            self.detected_files_mpi_coll_reads, self.report.name_records,
+        #                                            self.dxt_mpiio)
 
-        module.check_mpi_collective_write_operation(self.mpiio_coll_writes, self.mpiio_indep_writes,
-                                                    self.total_mpiio_write_operations,
-                                                    self.detected_files_mpiio_coll_writes, self.report.name_records, self.dxt_mpiio)
-
-        module.check_individual_read_imbalance(self.imbalance_count_posix_shared_time,
-                                               self.posix_shared_time_imbalance_detected_files3,
-                                               self.report.name_records, self.dxt_posix, self.dxt_posix_read_data)
+        # module.check_mpi_collective_write_operation(self.mpiio_coll_writes, self.mpiio_indep_writes,
+        #                                             self.total_mpiio_write_operations,
+        #                                             self.detected_files_mpiio_coll_writes, self.report.name_records, self.dxt_mpiio)
+        #
+        # module.check_individual_read_imbalance(self.imbalance_count_posix_shared_time,
+        #                                        self.posix_shared_time_imbalance_detected_files3,
+        #                                        self.report.name_records, self.dxt_posix, self.dxt_posix_read_data)
 
         module.check_mpi_none_block_operation(self.mpiio_nb_reads, self.mpiio_nb_writes, self.has_hdf5_extension,
                                               self.modules)
@@ -396,11 +397,12 @@ class AbstractDarshanTrace(abc.ABC):
 
 
     def _small_operation_insight(self):
-        module.check_small_operation(self.total_reads, self.total_reads_small, self.total_writes,
-                                     self.total_writes_small,
-                                     self.small_operation_detected_files,
-                                     self.modules, self.report.name_records, self.dxt_posix, self.dxt_posix_read_data,
-                                     self.dxt_posix_write_data)
+        pass
+        # module.check_small_operation(self.total_reads, self.total_reads_small, self.total_writes,
+        #                              self.total_writes_small,
+        #                              self.small_operation_detected_files,
+        #                              self.modules, self.report.name_records, self.dxt_posix, self.dxt_posix_read_data,
+        #                              self.dxt_posix_write_data)
 
 
 
